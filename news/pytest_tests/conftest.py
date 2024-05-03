@@ -42,6 +42,7 @@ def news():
     )
     return news
 
+
 @pytest.fixture
 def comment(author, news):
     comment = Comment.objects.create(
@@ -51,12 +52,14 @@ def comment(author, news):
     )
     return comment
 
+
 @pytest.fixture
 # Фикстура запрашивает другую фикстуру создания заметки.
 def pk_news(news):
     # И возвращает кортеж, который содержит slug заметки.
     # На то, что это кортеж, указывает запятая в конце выражения.
     return (news.pk,)
+
 
 @pytest.fixture
 def form_data():
@@ -65,12 +68,10 @@ def form_data():
     }
 
 
-# @pytest.fixture
-# # Фикстура запрашивает другую фикстуру создания заметки.
-# def pk_comment(comment):
-#     # И возвращает кортеж, который содержит slug заметки.
-#     # На то, что это кортеж, указывает запятая в конце выражения.
-#     return (comment.pk,)
-
-
-
+@pytest.fixture
+# Фикстура запрашивает другую фикстуру создания заметки.
+def news_10():
+    return News.objects.bulk_create(
+        News(title=f'Новость {index}', text='Просто текст.')
+        for index in range(11)
+    )
