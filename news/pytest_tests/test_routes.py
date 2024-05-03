@@ -1,16 +1,11 @@
 from http import HTTPStatus
-from django.urls import reverse
+
 import pytest
+from django.urls import reverse
 from pytest_django.asserts import assertRedirects
+
 from ..models import Comment, News
 
-
-# # Указываем в фикстурах встроенный клиент.
-# def test_home_availability_for_anonymous_user(client):
-#     # Адрес страницы получаем через reverse():
-#     url = reverse('news:home')
-#     response = client.get(url)
-#     assert response.status_code == HTTPStatus.OK
 
 @pytest.mark.parametrize(
     'name, args',

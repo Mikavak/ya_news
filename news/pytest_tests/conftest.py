@@ -1,11 +1,13 @@
 # conftest.py
-import pytest
+from datetime import datetime, timedelta
 
+import pytest
 # Импортируем класс клиента.
 from django.test.client import Client
+from django.utils import timezone
 
 # Импортируем модель заметки, чтобы создать экземпляр.
-from news.models import News, Comment
+from news.models import Comment, News
 
 
 @pytest.fixture
@@ -54,6 +56,18 @@ def comment(author, news):
 
 
 @pytest.fixture
+def comments_10(author, news):
+    now = timezone.now()
+    return Comment.objects.bulk_create(
+        Comment(author=author,
+                news=news,
+                text='Просто коммент',
+                created=now + timedelta(days=index))
+        for index in range(10)
+    )
+
+
+@pytest.fixture
 # Фикстура запрашивает другую фикстуру создания заметки.
 def pk_news(news):
     # И возвращает кортеж, который содержит slug заметки.
@@ -71,7 +85,10 @@ def form_data():
 @pytest.fixture
 # Фикстура запрашивает другую фикстуру создания заметки.
 def news_10():
+    today = datetime.today()
     return News.objects.bulk_create(
-        News(title=f'Новость {index}', text='Просто текст.')
+        News(title=f'Новость {index}',
+             text='Просто текст.',
+             date=today - timedelta(days=index))
         for index in range(11)
     )
